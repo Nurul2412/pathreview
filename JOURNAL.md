@@ -4,7 +4,7 @@
 
 **Issue title:** Vector store returns stale embeddings after a document is re-ingested
 
-**Tier:** [ ] Tier 1 [ ] Tier 2 [ x ] Tier 3
+**Tier:** [ ] Tier 1 [ ] Tier 2 [x] Tier 3
 
 **Problem summary:**  
 When an existing document is re-ingested, the application does not fully replace the document's previous vectors. As a result, the vector store can continue returning outdated chunks and embeddings from the older version of the document. A successful fix would remove or replace the old vectors before storing the newly generated embeddings, ensuring retrieval results always reflect the latest document content.
