@@ -17,3 +17,47 @@ I chose this issue because I have previously worked with document ingestion in t
 **Setup confirmation:** [x] App runs locally at localhost:5173
 
 **Cohort ledger:** [x] Issue added to cohort ledger
+
+---
+
+
+# Week 8 – Reproduction
+
+## Reproduction summary
+
+I created a new unit test to reproduce Issue #27 by ingesting a document, modifying its contents, and re-ingesting it using the same `source_id`. The expected behavior was that the vector store would replace the old document with the updated one.
+
+## Test performed
+
+1. Created a document with the text:
+   - "Original document says Python."
+2. Ingested the document into the vector store.
+3. Updated the document text to:
+   - "Updated document says Rust."
+4. Re-ingested the document using the same `source_id`.
+5. Queried the stored document from the vector store.
+
+## Result
+
+The test failed because the vector store still returned the original document instead of the updated one.
+
+**Expected:**
+
+```
+Updated document says Rust.
+```
+
+**Actual:**
+
+```
+Original document says Python.
+```
+
+This confirms that stale embeddings remain after re-ingesting a document and successfully reproduces Issue #27 in my local environment.
+
+## Files investigated
+
+- `tests/unit/test_batch_processor.py`
+- `ingestion/embeddings/batch_processor.py`
+- `ingestion/embeddings/provider.py`
+- `rag/vector_store.py`
