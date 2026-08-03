@@ -240,14 +240,11 @@ class TestBatchEmbeddingProcessor:
             },
         )
 
-         # Initial ingestion
+        # Initial ingestion
         processor.process([original_chunk])
 
         # Re-ingest changed content using the same source ID
-        try:
-            processor.process([updated_chunk])
-        except Exception:
-            pass
+        processor.process([updated_chunk])
 
         stored = collection.get(
             ids=["document-123_chunk_0"],
