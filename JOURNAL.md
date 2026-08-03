@@ -81,7 +81,7 @@ The full unit test suite contains unrelated pre-existing collection errors in ot
 
 ### Check-in 2
 
-**PR link:** 
+**PR link:** https://github.com/ascherj/pathreview/pull/702
 
 **Branch:** `fix/27-stale-embeddings`
 
@@ -93,6 +93,11 @@ Updated `tests/unit/test_batch_processor.py` by adding a regression test (`test_
 
 **Self-review confirmation:**  
 [ ] make check passes  
-[x] make test-unit passes
+[ ] make test-unit passes
 
 **Draft PR feedback received from:** none
+
+**Testing notes:**
+The targeted regression test
+`tests/unit/test_batch_processor.py::TestBatchEmbeddingProcessor::test_reingestion_replaces_existing_document`
+passes. The full unit suite is blocked by seven unrelated collection errors in existing test modules.
