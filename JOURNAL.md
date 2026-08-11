@@ -101,3 +101,34 @@ Updated `tests/unit/test_batch_processor.py` by adding a regression test (`test_
 The targeted regression test
 `tests/unit/test_batch_processor.py::TestBatchEmbeddingProcessor::test_reingestion_replaces_existing_document`
 passes. The full unit suite is blocked by seven unrelated collection errors in existing test modules.
+
+## Week 10 — Iteration & reflection
+
+### Reviewer feedback
+
+**Feedback received:** [x] Yes  [ ] No — still awaiting review
+
+**Summary of feedback:**
+The grader said that changing `add()` to `upsert()` in `BatchEmbeddingProcessor._store_embedding` was a clean and targeted fix that addressed the root cause of Issue #27. The grader also said that my regression test correctly reproduced the reported bug and verified the behavior after the fix. One area for improvement was test coverage: I identified edge cases in `PLAN.md`, such as re-ingesting documents with more or fewer chunks, but did not add tests for those cases. The grader also recommended documenting exactly which pre-existing tests failed before and after my change.
+
+**How you responded:**
+I reviewed the feedback and agree that the edge cases identified in my plan should have been converted into additional tests. If I continued working on this issue, I would add tests for re-ingesting documents with different numbers of chunks and compare the pre-existing test failures before and after the implementation. This would provide stronger evidence that the fix handles more than the basic regression case and does not introduce unrelated regressions.
+
+---
+
+### Reflection
+
+**What was harder than you expected?**
+Reproducing the stale embeddings issue was harder than I expected because my first test attempt failed because of my local ChromaDB setup rather than Issue #27 itself. I had to distinguish environment-related failures from the actual application bug before I could create a useful regression test. Once I reproduced the real issue, I confirmed that the original document remained in the vector store after re-ingestion.
+
+**What did you learn about working in a large codebase?**
+I learned that understanding the existing flow is more important than immediately changing code. For Issue #27, I traced the behavior through components such as `batch_processor.py`, `provider.py`, and the vector-store code before identifying where the stale data originated. The final implementation change was very small, but finding the correct place to make that change required much more investigation.
+
+**How did AI tools help — and where did they fall short?**
+AI tools helped me understand unfamiliar parts of PathReview, interpret test failures, and narrow down which components were relevant to the stale embeddings problem. They also helped me understand the difference between ChromaDB's `add()` and `upsert()` behavior. However, I still needed to run the code myself and inspect the results because not every failure was caused by my implementation, especially the environment and pre-existing test-suite failures.
+
+**What would you do differently if you started over?**
+If I started over, I would create the smallest regression test earlier and establish a clear baseline before changing the implementation. Based on the grader's feedback, I would also turn the edge cases I identified in `PLAN.md` into actual tests, especially re-ingesting documents with more or fewer chunks. I would also record the exact pre-existing test failures before making the change so I could compare them afterward.
+
+**What are you most proud of from this module?**
+I am most proud that I took Issue #27 from investigation to an actual pull request. I reproduced the stale embeddings behavior, traced the root cause to the embedding storage logic, changed ChromaDB from `add()` to `upsert()`, and confirmed that my regression test passed afterward. I am also proud that the grader specifically recognized the fix as a clean, targeted change that directly addressed the root cause.
